@@ -1,0 +1,45 @@
+{
+  "name": "spark-investment-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Spark Investment AI - Investment tracking and trading platform",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "migrate": "npx prisma migrate dev",
+    "migrate:deploy": "npx prisma migrate deploy",
+    "studio": "npx prisma studio",
+    "prisma:generate": "npx prisma generate",
+    "seed": "node prisma/seed.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:25233/git/spark-hq/Spark-Investment-Backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "axios": "^1.13.2",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "prisma": "^6.19.0",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.1.4"
+  }
+}
