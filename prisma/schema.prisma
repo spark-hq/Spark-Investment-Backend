@@ -1,0 +1,178 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User & Auth
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  name          String
+  phone         String?
+  pan           String?   @unique
+  riskProfile   String?   @default("moderate")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  portfolios    Portfolio[]
+  platforms     Platform[]
+  settings      UserSettings?
+  transactions  Transaction[]
+  strategies    AutoInvestStrategy[]
+}
+
+// Platform Connections
+model Platform {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name          String    // "zerodha", "groww", "wazirx"
+  type          String    // "broker", "exchange"
+  status        String    @default("connected")
+
+  apiKey        String?   @db.Text
+  apiSecret     String?   @db.Text
+  accessToken   String?   @db.Text
+
+  balance       Float     @default(0)
+  lastSync      DateTime  @default(now())
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  investments   Investment[]
+}
+
+// Portfolio
+model Portfolio {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name          String    @default("My Portfolio")
+
+  totalValue    Float     @default(0)
+  totalInvested Float     @default(0)
+  totalReturns  Float     @default(0)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([userId, name])
+}
+
+// Investments
+model Investment {
+  id              String    @id @default(uuid())
+  platformId      String
+  platform        Platform  @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+  symbol          String
+  name            String
+  type            String    // "equity", "mutual_fund", "crypto", "bond"
+
+  quantity        Float
+  avgPrice        Float
+  currentPrice    Float     @default(0)
+
+  investedValue   Float
+  currentValue    Float     @default(0)
+  returns         Float     @default(0)
+  returnsPercent  Float     @default(0)
+
+  status          String    @default("active")
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  transactions    Transaction[]
+}
+
+// Transactions
+model Transaction {
+  id              String      @id @default(uuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  investmentId    String?
+  investment      Investment? @relation(fields: [investmentId], references: [id], onDelete: SetNull)
+
+  type            String      // "buy", "sell", "dividend"
+  symbol          String
+  quantity        Float?
+  price           Float?
+  amount          Float
+  fees            Float       @default(0)
+
+  platform        String
+  status          String      @default("completed")
+
+  date            DateTime    @default(now())
+  createdAt       DateTime    @default(now())
+
+  @@index([userId, date])
+}
+
+// Auto-Invest Strategies
+model AutoInvestStrategy {
+  id              String    @id @default(uuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name            String
+  type            String    // "sip", "lumpsum", "smart"
+  amount          Float
+  frequency       String    // "daily", "weekly", "monthly"
+  status          String    @default("active")
+
+  config          Json      // Strategy-specific config
+
+  nextExecution   DateTime?
+  lastExecution   DateTime?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+// User Settings
+model UserSettings {
+  id              String    @id @default(uuid())
+  userId          String    @unique
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  currency        String    @default("INR")
+  language        String    @default("en")
+  timezone        String    @default("Asia/Kolkata")
+
+  notifications   Json      // Notification preferences
+  preferences     Json      // Other preferences
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+// Market Data Cache (for performance)
+model MarketDataCache {
+  id              String    @id @default(uuid())
+  symbol          String    @unique
+
+  price           Float
+  change          Float
+  changePercent   Float
+  volume          Float?
+  high            Float?
+  low             Float?
+  open            Float?
+  close           Float?
+
+  updatedAt       DateTime  @updatedAt
+}
