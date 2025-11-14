@@ -682,17 +682,258 @@ If issues occur:
 
 ---
 
+## Change: Portfolio APIs Deployed (Phase 2.1)
+**Date:** 2025-11-13 Evening
+**Backend PR:** Phase 2.1 commit
+**Backend Version:** v1.0.0-alpha (Phase 2.1 Complete)
+**Status:** ✅ Deployed to Development
+
+### Backend Changes Summary:
+Phase 2.1 complete! Portfolio APIs are now live with switchable market data architecture. Dashboard page is now fully functional with 7 portfolio endpoints.
+
+### New Endpoints Added:
+- ✅ GET /api/portfolio/summary - Portfolio summary with total value, returns
+- ✅ GET /api/portfolio/platforms - List of connected platforms
+- ✅ GET /api/portfolio/performance - Historical performance data
+- ✅ GET /api/portfolio/allocation - Asset allocation breakdown
+- ✅ GET /api/portfolio/top-performers - Top performing investments
+- ✅ GET /api/portfolio/activity - Recent portfolio activity
+- ✅ POST /api/portfolio/connect - Connect new platform
+
+### Backend Infrastructure Added:
+- ✅ **Switchable Market Data Architecture** (strategy pattern)
+  - Mock Market Data Provider (active)
+  - Yahoo Finance Provider (ready to activate)
+  - Easy to add: Zerodha, Groww, Binance providers
+- ✅ Switch providers via `MARKET_DATA_PROVIDER` env variable
+- ✅ 35 comprehensive tests for all portfolio endpoints
+- ✅ Platform credentials handling (optional for 'manual' platform)
+- ✅ Mock data with 20+ stocks, mutual funds, crypto
+
+### Modified Endpoints:
+None
+
+### Deprecated Endpoints:
+None
+
+### Removed Endpoints:
+None
+
+---
+
+### Frontend Changes Required:
+
+#### 1. NO Code Changes Needed! ✅
+- ✅ Frontend already built with correct API structure
+- ✅ Just switch from MOCK_MODE to real API
+- ✅ All Dashboard components will work immediately
+
+#### 2. Environment Configuration
+Update `.env` in frontend:
+```env
+VITE_MOCK_MODE=false
+VITE_API_BASE_URL=http://localhost:5000/api
+```
+
+#### 3. Test Portfolio Features
+- [ ] Test Dashboard summary cards
+- [ ] Test Platform cards display
+- [ ] Test Performance chart with time periods (1D, 1W, 1M, etc.)
+- [ ] Test Asset allocation pie chart
+- [ ] Test Top performers widget
+- [ ] Test Recent activity feed
+- [ ] Test Platform connection in Settings page
+
+---
+
+### API Contract Examples:
+
+**Get Portfolio Summary:**
+```http
+GET /api/portfolio/summary
+Authorization: Bearer {token}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "totalValue": 567890.50,
+    "totalInvested": 450000.00,
+    "totalReturns": 117890.50,
+    "returnsPercentage": 26.20,
+    "dayChange": 5420.30,
+    "dayChangePercentage": 0.96,
+    "lastUpdated": "2025-11-13T20:30:00Z"
+  }
+}
+```
+
+**Connect Platform (Manual - No Credentials Needed):**
+```http
+POST /api/portfolio/connect
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "platform": "manual"
+}
+```
+
+**Connect Platform (Zerodha - With Credentials):**
+```http
+POST /api/portfolio/connect
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "platform": "zerodha",
+  "credentials": {
+    "apiKey": "your-api-key",
+    "apiSecret": "your-api-secret"
+  }
+}
+```
+
+**Get Performance Data:**
+```http
+GET /api/portfolio/performance?period=1M
+Authorization: Bearer {token}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "period": "1M",
+    "dataPoints": [
+      {
+        "date": "2025-10-13",
+        "value": 450000.00,
+        "returns": 0.00
+      },
+      {
+        "date": "2025-11-13",
+        "value": 567890.50,
+        "returns": 26.20
+      }
+    ]
+  }
+}
+```
+
+---
+
+### Testing Checklist:
+- [x] ✅ All 7 portfolio endpoints implemented
+- [x] ✅ 35 test cases written
+- [x] ✅ Mock market data provider working
+- [x] ✅ Platform connection works (manual)
+- [x] ✅ Platform connection works (with credentials)
+- [x] ✅ Winston logging integrated
+- [ ] 🧪 Frontend Dashboard integration (pending)
+- [ ] 🧪 Frontend Settings integration (pending)
+- [ ] 🧪 End-to-end portfolio flow (pending)
+
+---
+
+### Estimated Frontend Work:
+**Time:** 1-2 hours (mainly testing)
+**Complexity:** Low (no code changes needed!)
+**Priority:** High (Dashboard functionality)
+
+**Breakdown:**
+- Configuration: 15 minutes
+- Testing Dashboard features: 45 minutes
+- Testing Settings/Platform connection: 30 minutes
+- Documentation: 15 minutes
+
+---
+
+### Breaking Changes: No ✅
+
+All portfolio endpoints match the existing API contract. Frontend was pre-built to match these APIs.
+
+---
+
+### Frontend Pages Affected:
+
+**Dashboard.jsx** (Main beneficiary! 🎉)
+- ✅ Portfolio Summary Cards
+- ✅ Platform Cards
+- ✅ Performance Chart (line graph)
+- ✅ Asset Allocation (pie chart)
+- ✅ Top Performers Widget
+- ✅ Recent Activity Feed
+
+**Settings.jsx**
+- ✅ Platform Connections section
+- ✅ Connect Platform modal/form
+
+---
+
+### Special Features:
+
+**1. Switchable Market Data:**
+Backend can switch between Mock → Yahoo → Zerodha without frontend changes!
+```env
+# Backend .env
+MARKET_DATA_PROVIDER=mock    # Active now
+MARKET_DATA_PROVIDER=yahoo   # Ready to switch
+```
+
+**2. Platform Credentials:**
+- `manual` platform: No credentials required
+- `zerodha`, `groww`, etc.: Credentials required
+- Frontend should handle both cases in UI
+
+**3. Time Period Support:**
+Performance endpoint supports: `1D`, `1W`, `1M`, `3M`, `6M`, `1Y`, `ALL`
+
+---
+
+### Dependencies on Other Changes:
+- [ ] No dependencies ✅
+- [ ] Backend server must be running
+- [ ] PostgreSQL database must be configured
+- [ ] User must be logged in (auth token)
+
+---
+
+### Rollback Plan:
+If issues occur:
+1. Switch `VITE_MOCK_MODE=true` in frontend
+2. Stop backend server
+3. Frontend continues working with mock data
+
+---
+
+### Frontend Implementation Status:
+- [x] ✅ Frontend built and ready
+- [x] ✅ MOCK_MODE implemented
+- [x] ✅ Backend Phase 1 deployed (Auth)
+- [x] ✅ Backend Phase 2.1 deployed (Portfolio) 🎉
+- [ ] 🧪 Integration testing in progress
+- [ ] ⏰ Production deployment pending
+
+**Assigned To:** Frontend Team
+**Target Completion:** Ready for testing NOW!
+
+---
+
 ## Change: Initial API Setup (Remaining Features)
 **Date:** 2025-11-13
 **Backend PR:** N/A (Planned)
-**Backend Version:** v1.0.0 (Phase 2-6)
-**Status:** ⏰ Planned (Next: Portfolio APIs)
+**Backend Version:** v1.0.0 (Phase 2.2-6)
+**Status:** ⏰ Next: Investment APIs (Phase 2.2)
 
 ### Backend Changes Summary:
-Remaining Phase 2-6 features: Portfolio, investments, market data, AI analysis, trading, transactions, auto-invest, and settings APIs.
+Remaining Phase 2-6 features: Investments, market data, AI analysis, trading, transactions, auto-invest, and settings APIs.
 
 ### New Endpoints Planned:
-43 additional endpoints (see API_CONTRACT.md for details)
+36 additional endpoints (see API_CONTRACT.md for details)
 
 ### Frontend Changes Required:
 None - Frontend already built with MOCK_MODE to match this API contract.
@@ -701,10 +942,11 @@ None - Frontend already built with MOCK_MODE to match this API contract.
 - [x] ✅ Frontend built and ready
 - [x] ✅ MOCK_MODE implemented
 - [x] ✅ Auth APIs deployed
-- [ ] 🔨 Waiting for Portfolio APIs (Phase 2)
+- [x] ✅ Portfolio APIs deployed (Phase 2.1)
+- [ ] 🔨 Waiting for Investment APIs (Phase 2.2)
 - [ ] ⏰ Full integration pending
 
-**Status:** Phase 1 complete. Phase 2 (Portfolio APIs) starting next.
+**Status:** Phase 2.1 complete. Phase 2.2 (Investment APIs) starting next.
 
 ---
 

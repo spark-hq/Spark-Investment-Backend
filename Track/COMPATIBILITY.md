@@ -19,15 +19,18 @@
 ## 🎯 CURRENT PRODUCTION
 
 **Frontend:** v0.0.0
-**Backend:** v1.0.0-alpha (Phase 1 Complete)
-**Status:** 🔨 Phase 1 Deployed - Development Active
+**Backend:** v1.0.0-alpha (Phase 2.1 Complete)
+**Status:** ✅ Phase 2.1 Deployed - Portfolio APIs Live
 
 **Current State:**
 - ✅ Frontend: Fully built with MOCK_MODE support
 - ✅ Backend Phase 1: Foundation & Authentication deployed
+- ✅ Backend Phase 2.1: Portfolio APIs deployed (7 endpoints)
 - ✅ API Contract: Documented and agreed upon
 - ✅ Auth APIs: Live and functional (signup, login, JWT)
-- 🔨 Backend Phase 2: Portfolio APIs in progress
+- ✅ Portfolio APIs: Live with switchable market data layer
+- ✅ Market Data: Mock provider active, Yahoo Finance ready
+- 🔨 Backend Phase 2.2: Investment APIs (next)
 - ⏰ Target Launch: Q1 2025
 
 ---
@@ -40,14 +43,18 @@
 **Current Development:**
 - ✅ Frontend: v0.0.0 (feature complete, ready for integration)
 - ✅ Backend Phase 1: v1.0.0-alpha (Authentication deployed)
-- 🔨 Backend Phase 2: Portfolio APIs (in progress)
+- ✅ Backend Phase 2.1: v1.0.0-alpha (Portfolio APIs deployed)
+- 🔨 Backend Phase 2.2: Investment APIs (next)
 
 **Integration Status:**
 - ✅ API Contract defined
 - ✅ Mock data implemented
-- ✅ Backend Phase 1 complete (Auth APIs)
+- ✅ Backend Phase 1 complete (Auth APIs - 4 endpoints)
+- ✅ Backend Phase 2.1 complete (Portfolio APIs - 7 endpoints)
+- ✅ Switchable market data architecture (mock/yahoo/real APIs)
 - ✅ Ready for frontend integration testing
-- 🔨 Phase 2 development in progress
+- ✅ 11/54 endpoints deployed (20.4% complete)
+- 🔨 Phase 2.2 development next (Investment APIs - 8 endpoints)
 
 ---
 
