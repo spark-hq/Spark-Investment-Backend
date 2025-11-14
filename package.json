@@ -7,8 +7,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --coverage",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --watch",
     "migrate": "npx prisma migrate dev",
     "migrate:deploy": "npx prisma migrate deploy",
     "studio": "npx prisma studio",
