@@ -32,7 +32,8 @@ describe('Auth API Tests', () => {
       expect(res.body.data.user.email).toBe(userData.email);
       expect(res.body.data.user.name).toBe(userData.name);
       expect(res.body.data.user.password).toBeUndefined(); // Password should not be returned
-      expect(res.body.data.token).toBeDefined();
+      expect(res.body.data.accessToken).toBeDefined();
+      expect(res.body.data.refreshToken).toBeDefined();
     });
 
     it('should reject signup with missing email', async () => {
@@ -132,7 +133,8 @@ describe('Auth API Tests', () => {
       expect(res.body.data.user).toBeDefined();
       expect(res.body.data.user.email).toBe('login@example.com');
       expect(res.body.data.user.password).toBeUndefined(); // Password should not be returned
-      expect(res.body.data.token).toBeDefined();
+      expect(res.body.data.accessToken).toBeDefined();
+      expect(res.body.data.refreshToken).toBeDefined();
     });
 
     it('should reject login with invalid email', async () => {
@@ -185,10 +187,10 @@ describe('Auth API Tests', () => {
   });
 
   describe('GET /api/auth/me', () => {
-    let token;
+    let accessToken;
 
     beforeEach(async () => {
-      // Create user and get token
+      // Create user and get tokens
       const signupRes = await request(app)
         .post('/api/auth/signup')
         .send({
@@ -197,13 +199,13 @@ describe('Auth API Tests', () => {
           name: 'Me User'
         });
 
-      token = signupRes.body.data.token;
+      accessToken = signupRes.body.data.accessToken;
     });
 
     it('should return current user with valid token', async () => {
       const res = await request(app)
         .get('/api/auth/me')
-        .set('Authorization', `Bearer ${token}`);
+        .set('Authorization', `Bearer ${accessToken}`);
 
       expect(res.statusCode).toBe(200);
       expect(res.body.success).toBe(true);

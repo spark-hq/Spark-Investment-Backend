@@ -19,6 +19,7 @@ model User {
   phone         String?
   pan           String?   @unique
   riskProfile   String?   @default("moderate")
+  refreshToken  String?   @db.Text
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

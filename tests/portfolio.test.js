@@ -19,7 +19,7 @@ describe('Portfolio API Tests', () => {
         name: 'Portfolio User'
       });
 
-    authToken = signupRes.body.data.token;
+    authToken = signupRes.body.data.accessToken;
     testUser = signupRes.body.data.user;
   });
 
