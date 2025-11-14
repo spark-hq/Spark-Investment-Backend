@@ -58,7 +58,7 @@ psql -U postgres
 CREATE DATABASE spark_investment;
 
 # Create user (optional)
-CREATE USER spark_user WITH PASSWORD 'your_password';
+CREATE USER spark_user WITH PASSWORD 'S2A5I4I9D3';
 GRANT ALL PRIVILEGES ON DATABASE spark_investment TO spark_user;
 
 # Exit
@@ -75,7 +75,8 @@ nano .env
 
 Update this line in `.env`:
 ```env
-DATABASE_URL="postgresql://postgres:your_password@localhost:5432/spark_investment"
+DATABASE_URL="postgresql://spark_user:your_password@localhost:5432/spark_investment"
+your_password: - S2A5I4I9D3 [to be deleted before prod]
 ```
 
 ### Step 4: Install Dependencies & Run Migrations
